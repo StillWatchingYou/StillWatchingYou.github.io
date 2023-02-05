@@ -12,8 +12,8 @@
     <p id="humi"></p>
     <h1>temp</h1>
     <p id="temp"></p>
-    <button onclick="turnON()">ON</button>
-    <button>OFF</button>
+    <button id="turn_on">ON</button>
+    <button id="turn_off">OFF</button>
 
     <script type="module">
       // Import the functions you need from the SDKs you need
@@ -40,13 +40,11 @@
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
       const db = getDatabase(app);
-      console.log(db);
       const dbRef = ref(getDatabase());
       get(child(dbRef, "1")).then((snapshot) => {
         if (snapshot.exists()) {
           document.getElementById("humi").innerHTML = snapshot.val().humi;
           document.getElementById("temp").innerHTML = snapshot.val().temp;
-          console.log(snapshot.val().humi);
         } else {
           console.log("No data available");
         }
@@ -54,16 +52,40 @@
         console.error(error);
       
       });
-      function turnON(LED_STATUS) {
+      function turnON() {
+        console.log('on');
+        console.log('onsdadadasda');
         set(ref(db, 'LED'), {
-          'LED_STATUS' : 'ON'
+
+          LED_STATUS : 'ON'
         });
       };
-      function turnOFF(LED_STATUS) {
+      function turnOFF() {
+        console.log('off');
         set(ref(db, 'LED'), {
-          'LED_STATUS' : 'OFF'
+          LED_STATUS : 'OFF'
+        });
+      };
+      const btn_on = document.getElementById("turn_on");
+      btn_on.addEventListener("click", turnON);
+      const btn_off = document.getElementById("turn_off");
+      btn_off.addEventListener("click", turnOFF);
+
+    </script>
+    
+    <!-- <script>  
+     function turnON() {
+        console.log('on');
+        set(ref(db, 'LED'), {
+
+          LED_STATUS : 'ON'
+        });
+      };
+      function turnOFF() {
+        set(ref(db, 'LED'), {
+          LED_STATUS : 'OFF'
         });
       }
-    </script>
+    </script> -->
 </body>
 </html>
