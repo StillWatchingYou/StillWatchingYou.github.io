@@ -8,12 +8,11 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>humi</h1>
-    <p id="humi"></p>
-    <h1>temp</h1>
-    <p id="temp"></p>
+    <h1>DO AM: <span id="humi"></span>%</h1>
+    <h1>NHIET DO: <span id="temp"></span>DO C</h1>
     <button id="turn_on">ON</button>
     <button id="turn_off">OFF</button>
+    <h1>LED_STATE: <span id="led"></span></h1>
 
     <script type="module">
       // Import the functions you need from the SDKs you need
@@ -52,16 +51,22 @@
         console.error(error);
       
       });
+      get(child(dbRef, "LED")).then((snapshot) => {
+        if (snapshot.exists()) {
+          document.getElementById("led").innerHTML = snapshot.val().LED_STATUS;
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      
+      });
       function turnON() {
-        console.log('on');
-        console.log('onsdadadasda');
         set(ref(db, 'LED'), {
-
           LED_STATUS : 'ON'
         });
       };
       function turnOFF() {
-        console.log('off');
         set(ref(db, 'LED'), {
           LED_STATUS : 'OFF'
         });
