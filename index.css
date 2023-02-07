@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+:root{
+    background-color: whitesmoke;
+    box-sizing: border-box;
+}
+#main-page{
+    
+    display: flex;
+    justify-content: space-evenly;
+}
+.page{
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 20vw;
+    background-color: white;
+    text-align: center;
+}
+.mode-btn-heading{
+    display: flex;
+    justify-content: space-around;
+}
+.device-state-heading{
+    display: flex;
+    justify-content: space-around;
+}
+.btn-box{
+    display: flex;
+    flex-direction: column;
+}
+.btn{
+    background-color: blue;
+    margin-bottom: 10px;
+    color: white;
+    border-width: 0px;
+    height:30px
+}

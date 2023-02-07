@@ -1,18 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="refresh" content="4">
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <title>IoT Project</title>
 </head>
 <body>
-    <h1>DO AM: <span id="humi"></span>%</h1>
-    <h1>NHIET DO: <span id="temp"></span>DO C</h1>
-    <button id="turn_on">ON</button>
-    <button id="turn_off">OFF</button>
-    <h1>LED_STATE: <span id="led"></span></h1>
+  
+    <div style="background-color: blue; height: 60px;color: white;margin-bottom: 30px;line-height: 60px;padding-left: 30px; margin-block-start: 0px;">
+      <h1>My Home</h1>
+    </div>
+
+    <div id="main-page">
+      <div class="page">
+        <h1 class="heading">BedRoom</h1>
+        <div class="info">
+          <p>Nhiệt độ hiện tại là <span id="temp"></span> độ C</p>
+          <p>Độ ẩm hiện tại là <span id="humi"></span> %</p>
+        </div>
+        <div class="mode-btn">
+          <div class="mode-btn-heading">
+            <h1>Mode</h1>
+            <h1 id="selected-mode-bed"></h1>
+          </div>
+          <div class="btn-box">
+            <button id="auto-btn-bed", class='btn'>AUTO</button>
+            <button id="manual-btn-bed", class='btn'>MANUAL</button>
+          </div>
+        </div>
+        <div class="device-state">
+          <div class="device-state-heading">
+            <h1>Fan</h1>
+            <h1 id="fan"></h1>
+          </div>
+          <div class="btn-box">
+            <button id="turn-on-fan", class='btn'>ON</button>
+            <button id="turn-off-fan", class='btn'>OFF</button>
+          </div>
+        </div>
+      </div>
+      <div class="page">
+        <h1 class="heading">Living Room</h1>
+        <div class="info">
+          <p>Nhiệt độ hiện tại là <span id="temp"></span> độ C</p>
+          <p>Độ ẩm hiện tại là <span id="humi"></span> %</p>
+        </div>
+        <div class="mode-btn">
+          <div class="mode-btn-heading">
+            <h1>Mode</h1>
+            <h1>Manual</h1>
+          </div>
+          <div class="btn-box">
+            <button class='btn',class="auto-btn">AUTO</button>
+            <button class='btn',class="manual-btn">MANUAL</button>
+          </div>
+        </div>
+        <div class="device-state">
+          <div class="device-state-heading">
+            <h1>Fan</h1>
+            <h1 id="led"></h1>
+          </div>
+          <div class="btn-box">
+            <button id="turn-on-led", class='btn'>ON</button>
+            <button id="turn-off-led", class='btn'>OFF</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script type="module">
       // Import the functions you need from the SDKs you need
@@ -40,7 +97,8 @@
       const analytics = getAnalytics(app);
       const db = getDatabase(app);
       const dbRef = ref(getDatabase());
-      get(child(dbRef, "1")).then((snapshot) => {
+      setInterval(function(){
+        get(child(dbRef, "1")).then((snapshot) => {
         if (snapshot.exists()) {
           document.getElementById("humi").innerHTML = snapshot.val().humi;
           document.getElementById("temp").innerHTML = snapshot.val().temp;
@@ -53,7 +111,7 @@
       });
       get(child(dbRef, "LED")).then((snapshot) => {
         if (snapshot.exists()) {
-          document.getElementById("led").innerHTML = snapshot.val().LED_STATUS;
+          document.getElementById("fan").innerHTML = snapshot.val().LED_STATUS;
         } else {
           console.log("No data available");
         }
@@ -61,20 +119,46 @@
         console.error(error);
       
       });
-      function turnON() {
+      get(child(dbRef, "MODE")).then((snapshot) => {
+        if (snapshot.exists()) {
+          document.getElementById("selected-mode-bed").innerHTML = snapshot.val().SELECTED_MODE;
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      
+      });
+    },0)
+      function turnONLED1() {
+        console.log('on')
         set(ref(db, 'LED'), {
           LED_STATUS : 'ON'
         });
       };
-      function turnOFF() {
+      function turnOFFLED1() {
         set(ref(db, 'LED'), {
           LED_STATUS : 'OFF'
         });
       };
-      const btn_on = document.getElementById("turn_on");
-      btn_on.addEventListener("click", turnON);
-      const btn_off = document.getElementById("turn_off");
-      btn_off.addEventListener("click", turnOFF);
+      function selectmodeA1(){
+        set(ref(db, 'MODE'), {
+          SELECTED_MODE : 'AUTO'
+        });
+      };
+      function selectmodeM1(){
+        set(ref(db, 'MODE'), {
+          SELECTED_MODE : 'MANUAL'
+        });
+      }
+      const manual_btn_bed = document.getElementById("manual-btn-bed");
+      manual_btn_bed.addEventListener("click", selectmodeM1);
+      const auto_btn_bed = document.getElementById("auto-btn-bed");
+      auto_btn_bed.addEventListener("click", selectmodeA1);
+      const btn_on_fan = document.getElementById("turn-on-fan");
+      btn_on_fan.addEventListener("click", turnONLED1);
+      const btn_off_fan = document.getElementById("turn-off-fan");
+      btn_off_fan.addEventListener("click", turnOFFLED1);
 
     </script>
     
