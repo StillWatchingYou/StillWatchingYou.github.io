@@ -18,8 +18,8 @@
       <div class="page">
         <h1 class="heading">BedRoom</h1>
         <div class="info">
-          <p>Nhiệt độ hiện tại là <span id="temp"></span> độ C</p>
-          <p>Độ ẩm hiện tại là <span id="humi"></span> %</p>
+          <p>Nhiệt độ hiện tại:    <span id="temp"></span> độ C</p>
+          <p>Độ ẩm hiện tại:    <span id="humi"></span> %</p>
         </div>
         <div class="mode-btn">
           <div class="mode-btn-heading">
@@ -45,22 +45,21 @@
       <div class="page">
         <h1 class="heading">Living Room</h1>
         <div class="info">
-          <p>Nhiệt độ hiện tại là <span id="temp"></span> độ C</p>
-          <p>Độ ẩm hiện tại là <span id="humi"></span> %</p>
+          <p>Mức sáng trong phòng hiện tại:      <span id="light"></span></p>
         </div>
         <div class="mode-btn">
           <div class="mode-btn-heading">
             <h1>Mode</h1>
-            <h1>Manual</h1>
+            <h1 id="selected-mode-living"></h1>
           </div>
           <div class="btn-box">
-            <button class='btn',class="auto-btn">AUTO</button>
-            <button class='btn',class="manual-btn">MANUAL</button>
+            <button id="auto-btn-living", class='btn'>AUTO</button>
+            <button id="manual-btn-living", class='btn'>MANUAL</button>
           </div>
         </div>
         <div class="device-state">
           <div class="device-state-heading">
-            <h1>Fan</h1>
+            <h1>Led</h1>
             <h1 id="led"></h1>
           </div>
           <div class="btn-box">
@@ -82,15 +81,14 @@
       // Your web app's Firebase configuration
       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
       const firebaseConfig = {
-        apiKey: "AIzaSyAqBhr1DQVLIqBwCb1X6AkU838Va8vcB9k",
-        authDomain: "esp32-firebase-35007.firebaseapp.com",
-        databaseURL: "https://esp32-firebase-35007-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "esp32-firebase-35007",
-        storageBucket: "esp32-firebase-35007.appspot.com",
-        messagingSenderId: "346343301999",
-        appId: "1:346343301999:web:bcb20f9d27076683f83e9a",
-        measurementId: "G-VRC1E72472"
-      };
+        apiKey: "AIzaSyAs-437oEDJhrBC6K3as4pLgFK9bBNln10",
+        authDomain: "esp8266-gateway-firebase.firebaseapp.com",
+        databaseURL: "https://esp8266-gateway-firebase-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "esp8266-gateway-firebase",
+        storageBucket: "esp8266-gateway-firebase.appspot.com",
+        messagingSenderId: "400010165428",
+        appId: "1:400010165428:web:a2116238f4b3002cf2abe1"
+};
     
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
@@ -98,7 +96,7 @@
       const db = getDatabase(app);
       const dbRef = ref(getDatabase());
       setInterval(function(){
-        get(child(dbRef, "1")).then((snapshot) => {
+        get(child(dbRef, "BED")).then((snapshot) => {
         if (snapshot.exists()) {
           document.getElementById("humi").innerHTML = snapshot.val().humi;
           document.getElementById("temp").innerHTML = snapshot.val().temp;
@@ -109,9 +107,9 @@
         console.error(error);
       
       });
-      get(child(dbRef, "LED")).then((snapshot) => {
+      get(child(dbRef, "LIVING")).then((snapshot) => {
         if (snapshot.exists()) {
-          document.getElementById("fan").innerHTML = snapshot.val().LED_STATUS;
+          document.getElementById("light").innerHTML = snapshot.val().light;
         } else {
           console.log("No data available");
         }
@@ -119,9 +117,21 @@
         console.error(error);
       
       });
-      get(child(dbRef, "MODE")).then((snapshot) => {
+      get(child(dbRef, "BED")).then((snapshot) => {
         if (snapshot.exists()) {
-          document.getElementById("selected-mode-bed").innerHTML = snapshot.val().SELECTED_MODE;
+          document.getElementById("fan").innerHTML = snapshot.val().FAN.FAN_STATUS;
+          document.getElementById("selected-mode-bed").innerHTML = snapshot.val().MODE.SELECTED_MODE_BED;
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      
+      });
+      get(child(dbRef, "LIVING")).then((snapshot) => {
+        if (snapshot.exists()) {
+          document.getElementById("led").innerHTML = snapshot.val().LED.LED_STATUS;
+          document.getElementById("selected-mode-living").innerHTML = snapshot.val().MODE.SELECTED_MODE_LIVING;        
         } else {
           console.log("No data available");
         }
@@ -130,35 +140,63 @@
       
       });
     },0)
-      function turnONLED1() {
-        console.log('on')
-        set(ref(db, 'LED'), {
-          LED_STATUS : 'ON'
+      function turnONLED() {
+        set(ref(db, 'LIVING/LED'), {
+          LED_STATUS : 'on'
         });
       };
-      function turnOFFLED1() {
-        set(ref(db, 'LED'), {
-          LED_STATUS : 'OFF'
+      function turnOFFLED() {
+        set(ref(db, 'LIVING/LED'), {
+          LED_STATUS : 'off'
         });
       };
-      function selectmodeA1(){
-        set(ref(db, 'MODE'), {
-          SELECTED_MODE : 'AUTO'
+      function turnONFAN() {
+        set(ref(db, 'BED/FAN'), {
+          FAN_STATUS : 'on'
         });
       };
-      function selectmodeM1(){
-        set(ref(db, 'MODE'), {
-          SELECTED_MODE : 'MANUAL'
+      function turnOFFFAN() {
+        set(ref(db, 'BED/FAN'), {
+          FAN_STATUS : 'off'
+        });
+      };
+      function selectmodeAB(){      
+        set(ref(db, 'BED/MODE'), {
+          SELECTED_MODE_BED : 'auto'
+        });
+      };
+      function selectmodeMB(){
+        set(ref(db, 'BED/MODE'), {
+          SELECTED_MODE_BED : 'manual'
+        });
+      };
+      function selectmodeAL(){      
+        set(ref(db, 'LIVING/MODE'), {
+          SELECTED_MODE_LIVING : 'auto'
+        });
+      };
+      function selectmodeML(){
+        set(ref(db, 'LIVING/MODE'), {
+          SELECTED_MODE_LIVING : 'manual'
         });
       }
       const manual_btn_bed = document.getElementById("manual-btn-bed");
-      manual_btn_bed.addEventListener("click", selectmodeM1);
+      manual_btn_bed.addEventListener("click", selectmodeMB);
       const auto_btn_bed = document.getElementById("auto-btn-bed");
-      auto_btn_bed.addEventListener("click", selectmodeA1);
+      auto_btn_bed.addEventListener("click", selectmodeAB);
       const btn_on_fan = document.getElementById("turn-on-fan");
-      btn_on_fan.addEventListener("click", turnONLED1);
+      btn_on_fan.addEventListener("click", turnONFAN);
       const btn_off_fan = document.getElementById("turn-off-fan");
-      btn_off_fan.addEventListener("click", turnOFFLED1);
+      btn_off_fan.addEventListener("click", turnOFFFAN);
+      const manual_btn_living = document.getElementById("manual-btn-living");
+      manual_btn_living.addEventListener("click", selectmodeML);
+      const auto_btn_living = document.getElementById("auto-btn-living");
+      auto_btn_living.addEventListener("click", selectmodeAL);
+      const btn_on_led = document.getElementById("turn-on-led");
+      btn_on_led.addEventListener("click", turnONLED);
+      const btn_off_led = document.getElementById("turn-off-led");
+      btn_off_led.addEventListener("click", turnOFFLED);
+      
 
     </script>
     
