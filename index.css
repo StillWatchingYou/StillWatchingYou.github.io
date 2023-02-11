@@ -2,7 +2,23 @@
     margin: 0;
     padding: 0;
 }
+
+@font-face {
+    font-family: glesan;
+    src: url(assets/fonts/OpenSans-Regular.ttf);
+}
+@font-face {
+    font-family: glesan;
+    font-weight: 700;
+    src: url(assets/fonts/OpenSans-Bold.ttf);
+}
+
+h1{
+    font-weight: 700;
+}
+
 :root{
+    font-family: glesan;
     background-color: whitesmoke;
     box-sizing: border-box;
 }
@@ -11,31 +27,137 @@
     display: flex;
     justify-content: space-evenly;
 }
+.img{
+    width: 200px;
+    height: 200px;
+    margin: 24px 132px 32px 132px ;
+}
 .page{
-    height: 70vh;
+    box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.08);
+    background-color: rgba(250, 250, 250, 1);
+    height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    width: 20vw;
+    width: 464px;
     background-color: white;
     text-align: center;
 }
 .mode-btn-heading{
     display: flex;
     justify-content: space-around;
+    margin-bottom: 16px;
 }
 .device-state-heading{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+}
+
+.info{
+    margin-bottom: 12px;
 }
 .btn-box{
     display: flex;
     flex-direction: column;
 }
 .btn{
-    background-color: blue;
+    background-image: linear-gradient(to right, rgba(17, 81, 155, 1),rgba(0, 157, 245, 1));
     margin-bottom: 10px;
     color: white;
     border-width: 0px;
-    height:30px
+    height:30px;
+    width: 120px;
+    margin-left: 40px;
+}
+.mode-btn{
+    width: 200px;
+}
+
+#selected-mode-bed{
+    line-height: 44px;
+    font-size: 24px;
+    padding-right: 10px;
+}
+
+#selected-mode-living{
+    line-height: 44px;
+    font-size: 24px;
+    padding-right: 10px;
+}
+
+#btn-bed{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#btn-living{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#toggle-fan{
+    width: 80px;
+    height: 40px;
+    background-color: rgba(221, 221, 221, 1);
+    border-radius: 30px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+#toggle-btn-fan{
+    position: relative;
+    top: 4px;
+    left: 4px;
+    width: 32px;
+    height: 32px;
+    background-color:white;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+
+#switch-btn-fan #text-fan{
+    font-size: 24px;
+}
+
+#toggle-fan.active{
+    background-image: linear-gradient(to right, rgba(17, 81, 155, 1),rgba(0, 157, 245, 1));
+    ;
+}
+
+#toggle-fan.active #toggle-btn-fan{
+    position: relative;
+    left: 45px;
+}
+
+#toggle-led{
+    width: 80px;
+    height: 40px;
+    background-color: rgba(221, 221, 221, 1);
+    border-radius: 30px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+#toggle-btn-led{
+    position: relative;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    width: 32px;
+    height: 32px;
+    background-color:white;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+
+#switch-btn-led #text-led{
+    font-size: 24px;
+}
+
+#toggle-led.active{
+    background-image: linear-gradient(to right, rgba(17, 81, 155, 1),rgba(0, 157, 245, 1));
+    ;
+}
+
+#toggle-led.active #toggle-btn-led{
+    position: relative;
+    left: 45px;
 }
