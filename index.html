@@ -105,9 +105,10 @@
       
       setInterval(function(){
         get(child(dbRef, "BED")).then((snapshot) => {
+          
         if (snapshot.exists()) {
-          document.getElementById("humi").innerHTML = snapshot.val().data_hum;
-          document.getElementById("temp").innerHTML = snapshot.val().data_temp;
+          document.getElementById("humi").innerHTML = snapshot.val().datahum;
+          document.getElementById("temp").innerHTML = snapshot.val().datatemp;
         } else {
           console.log("No data available");
         }
